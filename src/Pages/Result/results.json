@@ -1,137 +1,194 @@
 [
-    {
-      "key": "1",
-      "from": "New York",
-      "to": "Los Angeles",
-      "departure": "2024-06-15T08:00:00",
-      "company": "Air America",
-      "businessClassPrice": 1200,
-      "economicClassPrice": 300
-    },
-    {
-      "key": "2",
-      "from": "Chicago",
-      "to": "Miami",
-      "departure": "2024-06-16T10:30:00",
-      "company": "Skyline Air",
-      "businessClassPrice": 900,
-      "economicClassPrice": 200
-    },
-    {
-      "key": "3",
-      "from": "San Francisco",
-      "to": "New York",
-      "departure": "2024-06-17T13:00:00",
-      "company": "Fly High",
-      "businessClassPrice": 1500,
-      "economicClassPrice": 350
-    },
-    {
-      "key": "4",
-      "from": "Boston",
-      "to": "Houston",
-      "departure": "2024-06-18T09:00:00",
-      "company": "JetAway",
-      "businessClassPrice": 1100,
-      "economicClassPrice": 250
-    },
-    {
-      "key": "5",
-      "from": "Seattle",
-      "to": "Denver",
-      "departure": "2024-06-19T07:45:00",
-      "company": "Mountain Air",
-      "businessClassPrice": 800,
-      "economicClassPrice": 150
-    },
-    {
-      "key": "6",
-      "from": "Washington DC",
-      "to": "Atlanta",
-      "departure": "2024-06-20T06:30:00",
-      "company": "Capitol Airlines",
-      "businessClassPrice": 950,
-      "economicClassPrice": 220
-    },
-    {
-      "key": "7",
-      "from": "Dallas",
-      "to": "Las Vegas",
-      "departure": "2024-06-21T14:00:00",
-      "company": "Lone Star Flights",
-      "businessClassPrice": 1150,
-      "economicClassPrice": 275
-    },
-    {
-      "key": "8",
-      "from": "Orlando",
-      "to": "San Diego",
-      "departure": "2024-06-21T14:00:00",
-      "company": "Sunshine Air",
-      "businessClassPrice": 1250,
-      "economicClassPrice": 310
-    },
-    {
-      "key": "9",
-      "from": "Phoenix",
-      "to": "Philadelphia",
-      "departure": "2024-06-23T16:45:00",
-      "company": "Desert Flights",
-      "businessClassPrice": 1300,
-      "economicClassPrice": 320
-    },
-    {
-      "key": "10",
-      "from": "Detroit",
-      "to": "Charlotte",
-      "departure": "2024-06-24T17:00:00",
-      "company": "Motor City Air",
-      "businessClassPrice": 950,
-      "economicClassPrice": 200
-    },
-    {
-      "key": "11",
-      "from": "Minneapolis",
-      "to": "Tampa",
-      "departure": "2024-06-25T18:30:00",
-      "company": "Northern Flights",
-      "businessClassPrice": 1050,
-      "economicClassPrice": 240
-    },
-    {
-      "key": "12",
-      "from": "Newark",
-      "to": "Salt Lake City",
-      "departure": "2024-06-26T19:15:00",
-      "company": "Garden State Air",
-      "businessClassPrice": 1400,
-      "economicClassPrice": 330
-    },
-    {
-      "key": "13",
-      "from": "Portland",
-      "to": "Kansas City",
-      "departure": "2024-06-27T20:00:00",
-      "company": "Northwest Airlines",
-      "businessClassPrice": 950,
-      "economicClassPrice": 210
-    },
-    {
-      "key": "14",
-      "from": "New York",
-      "to": "Los Angeles",
-      "departure": "2024-06-15T08:00:00",
-      "company": "JetAway",
-      "businessClassPrice": 1300,
-      "economicClassPrice": 280
-    },
-    {
-      "key": "15",
-      "from": "Chicago",
-      "to": "Miami",
-      "departure": "2024-06-16T10:30:00",
-      "company": "Fly High",
-      "businessClassPrice": 1000,
-      "economicClassPrice": 220
-    }
-  ]
+  {
+    "key": "1",
+    "from": "New York",
+    "to": "Los Angeles",
+    "departure": "2024-06-15T08:00:00",
+    "company": "Air America",
+    "businessClassPrice": 1200,
+    "economicClassPrice": 300,
+    "directPrice":500,
+    "type": "direct",
+    "duration": 3
+  },
+  {
+    "key": "2",
+    "from": "Chicago",
+    "to": "Miami",
+    "departure": "2024-06-16T10:30:00",
+    "company": "Skyline Air",
+    "businessClassPrice": 900,
+    "economicClassPrice": 200,
+    "directPrice":600,
+    "type": "direct",
+    "duration": 3
+  },
+  {
+    "key": "3",
+    "from": "San Francisco",
+    "to": "New York",
+    "departure": "2024-06-17T13:00:00",
+    "company": "Fly High",
+    "businessClassPrice": 1500,
+    "economicClassPrice": 350,
+    "directPrice":900,
+    "type": "direct",
+    "duration": 6
+  },
+  {
+    "key": "4",
+    "from": "Boston",
+    "to": "Houston",
+    "departure": "2024-06-18T09:00:00",
+    "company": "JetAway",
+    "businessClassPrice": 1100,
+    "economicClassPrice": 250,
+    "directPrice":700,
+    "type": "direct",
+    "duration": 4
+  },
+  {
+    "key": "5",
+    "from": "Seattle",
+    "to": "Denver",
+    "departure": "2024-06-19T07:45:00",
+    "company": "Mountain Air",
+    "businessClassPrice": 800,
+    "economicClassPrice": 150,
+    "directPrice":200,
+    "type": "direct",
+    "duration": 2.5
+  },
+  {
+    "key": "6",
+    "from": "Washington DC",
+    "to": "Atlanta",
+    "departure": "2024-06-20T06:30:00",
+    "company": "Capitol Airlines",
+    "businessClassPrice": 950,
+    "economicClassPrice": 220,
+    "directPrice":0,
+    "type": "Connecting Flight",
+    "duration": 8
+  },
+  {
+    "key": "7",
+    "from": "Dallas",
+    "to": "Las Vegas",
+    "departure": "2024-06-21T14:00:00",
+    "company": "Lone Star Flights",
+    "businessClassPrice": 1150,
+    "economicClassPrice": 275,
+    "directPrice":500,
+    "type": "direct",
+    "duration": 3
+  },
+  {
+    "key": "8",
+    "from": "Orlando",
+    "to": "San Diego",
+    "departure": "2024-06-21T14:00:00",
+    "company": "Sunshine Air",
+    "businessClassPrice": 1250,
+    "economicClassPrice": 310,
+    "directPrice":250,
+    "type": "direct",
+    "duration": 5
+  },
+  {
+    "key": "9",
+    "from": "Phoenix",
+    "to": "Philadelphia",
+    "departure": "2024-06-23T16:45:00",
+    "company": "Desert Flights",
+    "businessClassPrice": 1300,
+    "economicClassPrice": 320,
+    "directPrice":350,
+    "type": "direct",
+    "duration": 5
+  },
+  {
+    "key": "10",
+    "from": "Detroit",
+    "to": "Charlotte",
+    "departure": "2024-06-24T17:00:00",
+    "company": "Motor City Air",
+    "businessClassPrice": 950,
+    "economicClassPrice": 200,
+    "directPrice":280,
+    "type": "direct",
+    "duration": 2
+  },
+  {
+    "key": "11",
+    "from": "Minneapolis",
+    "to": "Tampa",
+    "departure": "2024-06-25T18:30:00",
+    "company": "Northern Flights",
+    "businessClassPrice": 1050,
+    "economicClassPrice": 240,
+    "directPrice":0,
+    "type": "Connecting Flight",
+    "duration": 3.5
+  },
+  {
+    "key": "12",
+    "from": "Newark",
+    "to": "Salt Lake City",
+    "departure": "2024-06-26T19:15:00",
+    "company": "Garden State Air",
+    "businessClassPrice": 1400,
+    "economicClassPrice": 330,
+    "directPrice":600,
+    "type": "direct",
+    "duration": 5
+  },
+  {
+    "key": "13",
+    "from": "Portland",
+    "to": "Kansas City",
+    "departure": "2024-06-27T20:00:00",
+    "company": "Northwest Airlines",
+    "businessClassPrice": 950,
+    "economicClassPrice": 210,
+    "directPrice":590,
+    "type": "direct",
+    "duration": 3
+  },
+  {
+    "key": "14",
+    "from": "New York",
+    "to": "Los Angeles",
+    "departure": "2024-06-15T08:00:00",
+    "company": "JetAway",
+    "businessClassPrice": 1300,
+    "economicClassPrice": 280,
+    "directPrice":0,
+    "type": "Connecting Flight",
+    "duration": 6
+  },
+  {
+    "key": "15",
+    "from": "Chicago",
+    "to": "Miami",
+    "departure": "2024-06-16T10:30:00",
+    "company": "Fly High",
+    "businessClassPrice": 1000,
+    "economicClassPrice": 220,
+    "directPrice":0,
+    "type": "Connecting Flight",
+    "duration": 3
+  },
+  {
+    "key": "16",
+    "from": "New York",
+    "to": "Los Angeles",
+    "departure": "2024-06-15T10:00:00",
+    "company": "JetAway",
+    "businessClassPrice": 1300,
+    "economicClassPrice": 280,
+    "directPrice":500,
+    "type": "direct",
+    "duration": 2
+  }
+]

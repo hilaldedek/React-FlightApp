@@ -2,14 +2,22 @@ import React, { useState, useEffect } from 'react';
 import { Button, Steps, theme, Input, DatePicker, Select } from 'antd';
 import { useNavigate } from 'react-router';
 import { ArrowRightOutlined } from '@ant-design/icons';
+import { ToastContainer, toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 
 import companyData from './company.json';
 
 const Home = () => {
   const onChange = (date, dateString) => {
-    console.log(date, dateString);
+    setDepartureDate(dateString);
   };
+
   const [companies, setCompanies] = useState([]);
+  const [from, setFrom] = useState('');
+  const [to, setTo] = useState('');
+  const [departureDate, setDepartureDate] = useState(null);
+  const [selectedCompanies, setSelectedCompanies] = useState([]);
+
   useEffect(() => {
     setCompanies(companyData);
   }, []);
@@ -20,9 +28,19 @@ const Home = () => {
       content: () => (
         <>
           <div className='m-14 flex flex-row justify-center items-center'>
-            <Input placeholder="From" className='w-72 m-2' />
+            <Input
+              placeholder="From"
+              className='w-72 m-2'
+              value={from}
+              onChange={(e) => setFrom(e.target.value)}
+            />
             <ArrowRightOutlined />
-            <Input placeholder="To" className='w-72 m-2' />
+            <Input
+              placeholder="To"
+              className='w-72 m-2'
+              value={to}
+              onChange={(e) => setTo(e.target.value)}
+            />
           </div>
         </>
       ),
@@ -44,9 +62,9 @@ const Home = () => {
             allowClear
             className='w-72'
             placeholder="Please select"
-            defaultValue={[]}
+            value={selectedCompanies}
             onChange={handleChange}
-            options={companies.map(company => ({ value: company.companyId, label: company.companyName }))}
+            options={companies.map(company => ({ value: company.companyName, label: company.companyName }))}
           />
         </div>
       ),
@@ -54,22 +72,34 @@ const Home = () => {
   ];
 
   const handleChange = (value) => {
-    console.log(`selected ${value}`);
+    setSelectedCompanies(value);
   };
 
   const navigate = useNavigate();
   const { token } = theme.useToken();
   const [current, setCurrent] = useState(0);
+
   const next = () => {
+    if (current === 0 && (!from || !to)) {
+      toast.warn('Please fill in the "From" and "To" fields.');
+      return;
+    }
+    if (current === 1 && !departureDate) {
+      toast.warn('Please fill in the "Departure Date" field.');
+      return;
+    }
     setCurrent(current + 1);
   };
+
   const prev = () => {
     setCurrent(current - 1);
   };
+
   const items = steps.map((item) => ({
     key: item.title,
     title: item.title,
   }));
+
   const contentStyle = {
     lineHeight: '50px',
     textAlign: 'center',
@@ -78,6 +108,16 @@ const Home = () => {
     borderRadius: token.borderRadiusLG,
     border: `1px dashed ${token.colorBorder}`,
     marginTop: 16,
+  };
+
+  const handleDone = () => {
+    const formData = {
+      from,
+      to,
+      departureDate,
+      selectedCompanies,
+    };
+    navigate('/result', { state: formData });
   };
 
   return (
@@ -96,7 +136,7 @@ const Home = () => {
             </Button>
           )}
           {current === steps.length - 1 && (
-            <Button type="primary" onClick={() => navigate("/result")}>
+            <Button type="primary" onClick={handleDone}>
               Done
             </Button>
           )}
@@ -112,8 +152,9 @@ const Home = () => {
           )}
         </div>
       </div>
-
+      <ToastContainer />
     </>
   );
 };
+
 export default Home;
