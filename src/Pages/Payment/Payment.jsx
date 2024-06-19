@@ -2,22 +2,63 @@ import React, { useState } from 'react';
 import { Button, Modal, Space } from 'antd';
 import { ExclamationCircleOutlined } from '@ant-design/icons';
 import { useLocation, useNavigate } from 'react-router';
+import { toast } from 'react-toastify';
+import axios from 'axios';
 
 const Payment = () => {
   const location = useLocation();
   const navigate=useNavigate();
   const priceDetails = location.state;
+  const seat=priceDetails[0];
+  const businessPrice=priceDetails[1];
+  const economicPrice=priceDetails[2];
+  const directPrice=priceDetails[3];
+  console.log("PAYMENT DATA: ",priceDetails)
   const [modal, contextHolder] = Modal.useModal();
+  console.log("SEAT: ",seat)
+  
+  const calculateTotalPrice = (seats, businessPrice, economicPrice, directPrice) => {
+    let totalPrice = 0;
+    seats.forEach(seat => {
+      const seatNumber = parseInt(seat.split(' ')[1]);
+      if (seatNumber >= 1 && seatNumber <= 3) {
+        totalPrice += businessPrice + directPrice;
+      } else {
+        totalPrice += economicPrice + directPrice;
+      }
+    });
+    return totalPrice;
+  };
 
+  const totalPrice = calculateTotalPrice(seat, businessPrice, economicPrice,directPrice);
+
+  const handlePay=async()=>{
+    try {
+      const response = await axios.put('http://127.0.0.1:5000/select-seat', {
+        _id: priceDetails[4],
+        selected: seat
+      });
+      if (response.status === 201) {
+        toast.success(response.data.message);
+        
+      } else {
+        toast.error('Failed to reserve seats.');
+      }
+    } catch (error) {
+      console.error(error);
+      toast.error(error.response ? error.response.data.message : 'An error occurred');
+    }
+  }
 
   const confirmPayment = () => {
     modal.confirm({
       title: 'Confirm',
       icon: <ExclamationCircleOutlined />,
-      content: `Do you confirm the ${priceDetails}$ payment?`,
+      content: `Do you confirm the ${totalPrice}$ payment?`,
       okText: 'Okey',
       cancelText: 'Close',
       onOk: () => {
+        handlePay()
         navigate("/ticket")
       },
     });
@@ -43,7 +84,7 @@ const Payment = () => {
           </div>
         </div>
       </div>
-      <div className='mt-12 text-2xl'>{priceDetails}$</div>
+      <div className='mt-12 text-2xl'>{totalPrice}$</div>
       <div>
         <Space>
           <Button className='mt-8' onClick={confirmPayment}>Pay</Button>

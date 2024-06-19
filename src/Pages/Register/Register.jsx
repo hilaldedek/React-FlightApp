@@ -36,7 +36,7 @@ const Register = () => {
   return (
     <div className='flex flex-col justify-center items-center gap-4 m-16'>
       <h1 className='text-4xl m-4'>Register</h1>
-      <Segmented options={["Customer", "Company"]} block value={status} onChange={(value) => setStatus(value)}/>
+      <Segmented options={["Customer", "Company"]} block value={status} onChange={(value) => setStatus(value)} className="mb-8 w-96 m-auto"/>
       <Input
         size="large"
         placeholder= {status=="Customer" ? "Username" : "Company Name"}

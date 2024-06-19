@@ -1,11 +1,14 @@
 import React, { useState, useEffect } from 'react';
-import { Button, Steps, theme, Input, DatePicker, Select } from 'antd';
+import { Button, Steps, theme, Input, DatePicker, Select, Carousel } from 'antd';
 import { useNavigate } from 'react-router';
 import { ArrowRightOutlined } from '@ant-design/icons';
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
-
 import companyData from './company.json';
+import axios from 'axios';
+// import plane1 from '../../assets/plane1.jpg';
+// import plane2 from '../../assets/plane2.jpg';
+// import plane3 from '../../assets/plane3.jpg';
 
 const Home = () => {
   const onChange = (date, dateString) => {
@@ -17,11 +20,10 @@ const Home = () => {
   const [to, setTo] = useState('');
   const [departureDate, setDepartureDate] = useState(null);
   const [selectedCompanies, setSelectedCompanies] = useState([]);
-
+console.log("HELÜÜ: ",selectedCompanies,from,to,departureDate)
   useEffect(() => {
     setCompanies(companyData);
   }, []);
-
   const steps = [
     {
       title: 'From > To',
@@ -109,7 +111,14 @@ const Home = () => {
     border: `1px dashed ${token.colorBorder}`,
     marginTop: 16,
   };
-
+//   const contentStyleCarousel= {
+//       margin: "auto",
+//       height: '400px',
+//       color: '#fff',
+//       lineHeight: '160px',
+//       textAlign: 'center',
+//       background: '#364d79',
+// };
   const handleDone = () => {
     const formData = {
       from,
@@ -131,7 +140,7 @@ const Home = () => {
           }}
         >
           {current < steps.length - 1 && (
-            <Button type="primary" onClick={() => next()}>
+            <Button type="primary" className='bg-#eaff8f' onClick={() => next()}>
               Next
             </Button>
           )}
@@ -153,6 +162,17 @@ const Home = () => {
         </div>
       </div>
       <ToastContainer />
+      {/* <Carousel arrows infinite={false}>
+      <div>
+        <h3 style={contentStyleCarousel}><img src={plane1}/></h3>
+      </div>
+      <div>
+        <h3 style={contentStyleCarousel}><img src={plane2}/></h3>
+      </div>
+      <div>
+        <h3 style={contentStyleCarousel}><img src={plane3}/></h3>
+      </div>
+    </Carousel> */}
     </>
   );
 };

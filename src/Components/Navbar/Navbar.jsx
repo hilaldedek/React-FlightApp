@@ -61,6 +61,7 @@ export default function Example() {
         toast.success('Logout successfully.');
         localStorage.removeItem("token");
         localStorage.removeItem("name");
+        localStorage.removeItem("userStatus");
         navigate("/");
       }
     } catch (error) {
@@ -75,7 +76,7 @@ export default function Example() {
         <div className="flex lg:flex-1">
           <Link to="/" className="-m-1.5 p-1.5 flex">
             <img className="h-8 w-auto" src={PlaneIcon} alt="" />
-            <h1 className='font-sevillana text-xl'>Atla</h1>
+            <h1 className='font-sevillana text-2xl'>Fairylines</h1>
           </Link>
         </div>
         <div className="flex lg:hidden">
@@ -90,11 +91,34 @@ export default function Example() {
         </div>
         <PopoverGroup className="hidden lg:flex lg:gap-x-12">
           <a href="#" className="text-sm font-semibold leading-6 text-gray-900">
-            Biz Kimiz?
+          Who are we?
           </a>
           <a href="#" className="text-sm font-semibold leading-6 text-gray-900">
-            Şirketler
+            Companys
           </a>
+          {
+            localStorage.getItem("token")&&localStorage.getItem("userStatus")==="Customer" ? (
+             <a href="#" className="text-sm font-semibold leading-6 text-gray-900">
+            Profile
+          </a> 
+            ) : ""
+          }
+          {
+            localStorage.getItem("token")&&localStorage.getItem("userStatus")==="Company" ? (
+             <a href="/add-flight" className="text-sm font-semibold leading-6 text-gray-900">
+            Add Flight
+          </a> 
+            ) : ""
+          }
+          {
+            localStorage.getItem("token")&&localStorage.getItem("userStatus")==="Company" ? (
+             <a href="/flights" className="text-sm font-semibold leading-6 text-gray-900">
+            Flights
+          </a> 
+            ) : ""
+          }
+          
+          
         </PopoverGroup>
         {
           localStorage.getItem("token") ? (
@@ -134,23 +158,42 @@ export default function Example() {
           <div className="mt-6 flow-root">
             <div className="-my-6 divide-y divide-gray-500/10">
               <div className="space-y-2 py-6">
+                {
+                  localStorage.getItem("token")&&localStorage.getItem("userStatus")==="Customer" ? ( <a
+                    href="/profile"
+                    className="-mx-3 block rounded-lg px-3 py-2 text-base font-semibold leading-7 text-gray-900 hover:bg-gray-50"
+                  >
+                    Profile
+                  </a>):""
+                }
+                {
+                  localStorage.getItem("token")&&localStorage.getItem("userStatus")==="Company" ? ( <a
+                    href="/add-flight"
+                    className="-mx-3 block rounded-lg px-3 py-2 text-base font-semibold leading-7 text-gray-900 hover:bg-gray-50"
+                  >
+                    Add Flight
+                  </a>):""
+                }
+                {
+                  localStorage.getItem("token")&&localStorage.getItem("userStatus")==="Company" ? ( <a
+                    href="/flights"
+                    className="-mx-3 block rounded-lg px-3 py-2 text-base font-semibold leading-7 text-gray-900 hover:bg-gray-50"
+                  >
+                    Flights
+                  </a>):""
+                }
+               
                 <a
                   href="#"
                   className="-mx-3 block rounded-lg px-3 py-2 text-base font-semibold leading-7 text-gray-900 hover:bg-gray-50"
                 >
-                  Profil
+                  Companys
                 </a>
                 <a
                   href="#"
                   className="-mx-3 block rounded-lg px-3 py-2 text-base font-semibold leading-7 text-gray-900 hover:bg-gray-50"
                 >
-                  Şirketler
-                </a>
-                <a
-                  href="#"
-                  className="-mx-3 block rounded-lg px-3 py-2 text-base font-semibold leading-7 text-gray-900 hover:bg-gray-50"
-                >
-                  Biz Kimiz?
+                  Who are we?
                 </a>
               </div>
               <div className="py-6">
