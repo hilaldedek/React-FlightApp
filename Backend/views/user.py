@@ -15,7 +15,6 @@ class Login(Resource):
     @cross_origin()
     def post(self):
         data = request.get_json()
-        print(data.get("status"))
         user = User.get_user_by_username(username=data.get("username"))
         if user.status == data.get("status"):
             if user and (user.check_password(password=data.get("password"))):
@@ -30,6 +29,7 @@ class Login(Resource):
                                 "access token": access_token,
                                 "refresh token": refresh_token,
                             },
+                            "userStatus": data.get("status"),
                         }
                     ),
                     200,

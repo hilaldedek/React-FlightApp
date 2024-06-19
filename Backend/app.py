@@ -3,16 +3,14 @@ from mongoengine import connect
 from flask_restful import Api
 from flask_cors import CORS
 from flask_jwt_extended import JWTManager
-from views.flight import FlightSearch,AddFlight
+from views.flight import FlightSearch, AddFlight, SelectSeat, FlightsDetail
 from views.user import Login, Logout, Register
 
 app = Flask(__name__)
 
 CORS(app, supports_credentials=True, origins="*", host=3000)
 
-app.config["JWT_SECRET_KEY"] = (
-    "your_secret_key"
-)
+app.config["JWT_SECRET_KEY"] = "your_secret_key"
 
 
 jwt = JWTManager(app)
@@ -29,7 +27,9 @@ api.add_resource(
     FlightSearch,
     "/flight-result",
 )
-api.add_resource(AddFlight,"/add-flight")
+api.add_resource(AddFlight, "/add-flight")
+api.add_resource(SelectSeat, "/select-seat")
+api.add_resource(FlightsDetail, "/flights")
 
 
 if __name__ == "__main__":
