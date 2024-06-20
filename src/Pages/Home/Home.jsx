@@ -5,10 +5,7 @@ import { ArrowRightOutlined } from '@ant-design/icons';
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import companyData from './company.json';
-import axios from 'axios';
-// import plane1 from '../../assets/plane1.jpg';
-// import plane2 from '../../assets/plane2.jpg';
-// import plane3 from '../../assets/plane3.jpg';
+import sky from "../../assets/sky.jpg"
 
 const Home = () => {
   const onChange = (date, dateString) => {
@@ -20,6 +17,7 @@ const Home = () => {
   const [to, setTo] = useState('');
   const [departureDate, setDepartureDate] = useState(null);
   const [selectedCompanies, setSelectedCompanies] = useState([]);
+  
 console.log("HELÜÜ: ",selectedCompanies,from,to,departureDate)
   useEffect(() => {
     setCompanies(companyData);
@@ -111,14 +109,12 @@ console.log("HELÜÜ: ",selectedCompanies,from,to,departureDate)
     border: `1px dashed ${token.colorBorder}`,
     marginTop: 16,
   };
-//   const contentStyleCarousel= {
-//       margin: "auto",
-//       height: '400px',
-//       color: '#fff',
-//       lineHeight: '160px',
-//       textAlign: 'center',
-//       background: '#364d79',
-// };
+  const contentCarouselStyle= {
+    height: '200px',
+    color: '#fff',
+    textAlign: 'center',
+    backgroundImage: `url(${sky})`,
+  };
   const handleDone = () => {
     const formData = {
       from,
@@ -162,17 +158,20 @@ console.log("HELÜÜ: ",selectedCompanies,from,to,departureDate)
         </div>
       </div>
       <ToastContainer />
-      {/* <Carousel arrows infinite={false}>
-      <div>
-        <h3 style={contentStyleCarousel}><img src={plane1}/></h3>
-      </div>
-      <div>
-        <h3 style={contentStyleCarousel}><img src={plane2}/></h3>
-      </div>
-      <div>
-        <h3 style={contentStyleCarousel}><img src={plane3}/></h3>
-      </div>
-    </Carousel> */}
+      <Carousel autoplay className='w-3/4 m-auto'>
+    <div>
+      <h3 style={contentCarouselStyle}className='py-16 mt-16 font-sevillana text-3xl'>We have been with you since 2024 to provide you with a pleasant flight experience.</h3>
+    </div>
+    <div>
+      <h3 style={contentCarouselStyle} className=' py-16 mt-16  font-sevillana text-3xl'>Countless options</h3>
+    </div>
+    <div>
+      <h3 style={contentCarouselStyle} className='py-16 mt-16 font-sevillana text-3xl'>The best flight deals</h3>
+    </div>
+    <div>
+      <h3 style={contentCarouselStyle} className='py-16 mt-16 font-sevillana text-3xl'>Purchase securely</h3>
+    </div>
+  </Carousel>
     </>
   );
 };

@@ -59,7 +59,7 @@ console.log(targetKeys)
             ) : ""
           }
           
-          <div>Bussiness Class: {flightDetails.businessClassPrice}$</div>
+          <div>Business Class: {flightDetails.businessClassPrice}$</div>
           <div>Economic Class: {flightDetails.economicClassPrice}$</div>
         </div>
       ),
@@ -89,7 +89,8 @@ console.log(targetKeys)
   };
 
   const handleSelect = async () => {
-    const payData=[targetKeys,flightDetails.businessClassPrice,flightDetails.economicClassPrice,flightDetails.directPrice,flightDetails._id]
+    const payData=[targetKeys,flightDetails]
+    console.log(payData)
     navigate("/payment", { state: payData });
   };
 

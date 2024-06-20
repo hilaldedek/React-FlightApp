@@ -35,7 +35,7 @@ const Login = () => {
   };
   return (
     <div className='m-16'>
-      <h1 className='text-4xl m-6'>Login</h1>
+      <h1 className='text-4xl m-6 font-sevillana text-3xl'>Login</h1>
       <Segmented options={["Customer", "Company"]} block value={status} onChange={(value) => setStatus(value)} className="mb-8 w-96 m-auto"/>
       <div className='flex flex-col justify-center items-center gap-4'>
         <Input size="large" placeholder= {status=="Customer" ? "Username" : "Company Name"} className='w-72' prefix={<UserOutlined />} value={username}

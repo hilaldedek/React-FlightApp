@@ -7,16 +7,21 @@ import axios from 'axios';
 
 const Payment = () => {
   const location = useLocation();
-  const navigate=useNavigate();
+  const navigate = useNavigate();
   const priceDetails = location.state;
-  const seat=priceDetails[0];
-  const businessPrice=priceDetails[1];
-  const economicPrice=priceDetails[2];
-  const directPrice=priceDetails[3];
-  console.log("PAYMENT DATA: ",priceDetails)
+  const seat = priceDetails[0];
+  const businessPrice = priceDetails[1].businessClassPrice;
+  const economicPrice = priceDetails[1].economicClassPrice;
+  const directPrice = priceDetails[1].directPrice;
+  const where = priceDetails[1].where;
+  const to = priceDetails[1].to;
+  const departure = priceDetails[1].departure;
+  const company = priceDetails[1].company;
+
+  console.log("PAYMENT DATA: ", priceDetails);
   const [modal, contextHolder] = Modal.useModal();
-  console.log("SEAT: ",seat)
-  
+  console.log("SEAT: ", seat);
+
   const calculateTotalPrice = (seats, businessPrice, economicPrice, directPrice) => {
     let totalPrice = 0;
     seats.forEach(seat => {
@@ -30,25 +35,33 @@ const Payment = () => {
     return totalPrice;
   };
 
-  const totalPrice = calculateTotalPrice(seat, businessPrice, economicPrice,directPrice);
-
-  const handlePay=async()=>{
+  const totalPrice = calculateTotalPrice(seat, businessPrice, economicPrice, directPrice);
+  const handlePay = async () => {
     try {
+      const token = localStorage.getItem("token");
       const response = await axios.put('http://127.0.0.1:5000/select-seat', {
-        _id: priceDetails[4],
-        selected: seat
+        flight_id: priceDetails[1]._id,
+        selected: seat,
+        where: where,
+        to: to,
+        departure: departure,
+        company: company,
+      }, {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        }
       });
-      if (response.status === 201) {
+      if (response.status === 201 || response.status===200) {
         toast.success(response.data.message);
-        
+        navigate("/profile");
       } else {
         toast.error('Failed to reserve seats.');
       }
     } catch (error) {
       console.error(error);
       toast.error(error.response ? error.response.data.message : 'An error occurred');
-    }
-  }
+    }
+  };
 
   const confirmPayment = () => {
     modal.confirm({
@@ -58,11 +71,11 @@ const Payment = () => {
       okText: 'Okey',
       cancelText: 'Close',
       onOk: () => {
-        handlePay()
-        navigate("/ticket")
+        handlePay();
       },
     });
   };
+
   return (
     <div className='mt-16'>
       <div className="flex flex-col justify-around bg-gray-800 p-4 border border-white border-opacity-30 rounded-lg shadow-md max-w-xs mx-auto">

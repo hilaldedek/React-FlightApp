@@ -17,7 +17,7 @@ const AddFlight = () => {
     const [departure, setDeparture] = useState('');
     const [duration, setDuration] = useState('');
     const [economicClassPrice, setEconomicClassPrice] = useState('');
-    const [bussinessClassPrice, setBussinessClassPrice] = useState('');
+    const [businessClassPrice, setBusinessClassPrice] = useState('');
     const [directPrice, setDirectPrice] = useState('');
     const company = localStorage.getItem("name");
 
@@ -25,22 +25,22 @@ const AddFlight = () => {
       try {
         if (flightType === "Connecting Flight") {
           setDirectPrice(0)
-        }            
+        }   
+        console.log(businessClassPrice, typeof(businessClassPrice), parseInt(businessClassPrice), typeof(parseInt(businessClassPrice)))         
         const response = await axios.post('http://localhost:5000/add-flight', {
           where,
           to,
           departure,
           duration: parseInt(duration),
           economicClassPrice: parseInt(economicClassPrice),
-          bussinessClassPrice: parseInt(bussinessClassPrice),
+          businessClassPrice: parseInt(businessClassPrice),
           directPrice: parseInt(directPrice) || 0,
           company,
-          flightType
+          type: flightType
         });
         console.log(response.data)
         if (response.data.status === "201") {
           message.success('New Flight added successfully.');
-          // navigate("/login");
         } else {
           message.error(response.data.message);
         }
@@ -49,6 +49,8 @@ const AddFlight = () => {
         message.error('An error occurred during add flight.');
       }
     };
+    
+    
 
     return (
       <div className='mt-16 flex justify-center items-center'>
@@ -77,8 +79,8 @@ const AddFlight = () => {
           <Form.Item label="Economic Class">
             <Input addonAfter="$" value={economicClassPrice} onChange={(e) => setEconomicClassPrice(e.target.value)} />
           </Form.Item>
-          <Form.Item label="Bussiness Class">
-            <Input addonAfter="$" value={bussinessClassPrice} onChange={(e) => setBussinessClassPrice(e.target.value)} />
+          <Form.Item label="Business Class">
+            <Input addonAfter="$" value={businessClassPrice} onChange={(e) => setBusinessClassPrice(e.target.value)} />
           </Form.Item>
           <Radio.Group name="radiogroup" defaultValue={1} onChange={(e) => { setFlightType(e.target.value) }}>
             <Radio value={"Direct"}>Direct</Radio>
@@ -86,7 +88,7 @@ const AddFlight = () => {
           </Radio.Group>
           {
             flightType === "Direct" ?
-              <Form.Item label="Direct Price">
+              <Form.Item label="Direct Price" className='mt-6'>
                 <Input addonAfter="$" value={directPrice} onChange={(e) => setDirectPrice(e.target.value)} />
               </Form.Item>
               : ""
