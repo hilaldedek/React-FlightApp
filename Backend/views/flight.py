@@ -4,6 +4,7 @@ from flask_cors import cross_origin
 from flask_jwt_extended import get_jwt, jwt_required, get_jwt_identity
 from flask_restful import Resource
 from models.flight import Flight
+from models.user import User
 from models.ticket import Ticket
 from datetime import datetime
 from flask import request
@@ -100,7 +101,7 @@ class FilterFlightSearch(Resource):
 
         print("QUERRRYYY: ", query)
 
-        formatted_posts = [
+        formatted_flights = [
             {
                 "_id": str(flight.id),
                 "where": flight.where,
@@ -117,11 +118,11 @@ class FilterFlightSearch(Resource):
             }
             for flight in query
         ]
-        print(formatted_posts)
+        print(formatted_flights)
 
-        if len(formatted_posts) > 0:
+        if len(formatted_flights) > 0:
             return make_response(
-                jsonify({"flights": formatted_posts, "status": "200"}), 200
+                jsonify({"flights": formatted_flights, "status": "200"}), 200
             )
 
         return make_response(
@@ -185,7 +186,6 @@ class SelectSeat(Resource):
             flight_id=flight_id, username=current_user
         ).first()
         if existing_ticket:
-            # Mevcut bilet varsa koltuk numaralarını güncelle
             existing_seats = set(existing_ticket.seat)
             new_seats = set(selected_seats)
             updated_seats = list(existing_seats.union(new_seats))
@@ -200,7 +200,6 @@ class SelectSeat(Resource):
                 200,
             )
         else:
-            # Mevcut bilet yoksa yeni bilet oluştur
             flight.update(pull_all__empty=selected_seats, push_all__full=selected_seats)
             ticket = Ticket(
                 flight_id=data["flight_id"],
@@ -221,6 +220,27 @@ class SelectSeat(Resource):
                 201,
             )
 
+class GetCompany(Resource):
+    def get(self):
+        companys = User.objects(
+            status="Company",
+        ).all()
+        formatted_company = [
+            {
+                "_id": str(company.id),
+                "companyName": company.username,
+            }
+            for company in companys
+        ]
+        print(formatted_company)
+        if len(formatted_company) > 0:
+            return make_response(
+                jsonify({"company": formatted_company, "status": "200"}), 200
+            )
+
+        return make_response(
+            jsonify({"message": "company not found.", "status": "404"}), 404
+        )
 
 class FlightsDetail(Resource):
     @jwt_required()

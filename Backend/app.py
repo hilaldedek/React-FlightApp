@@ -3,7 +3,7 @@ from mongoengine import connect
 from flask_restful import Api
 from flask_cors import CORS
 from flask_jwt_extended import JWTManager
-from views.flight import FlightSearch, AddFlight, SelectSeat, FlightsDetail,TicketDetail,FilterFlightSearch
+from views.flight import FlightSearch, AddFlight, SelectSeat, FlightsDetail,TicketDetail,FilterFlightSearch,GetCompany
 from views.user import Login, Logout, Register
 
 app = Flask(__name__)
@@ -32,6 +32,7 @@ api.add_resource(SelectSeat, "/select-seat")
 api.add_resource(FlightsDetail, "/flights")
 api.add_resource(TicketDetail, "/tickets")
 api.add_resource(FilterFlightSearch,"/filter-flight")
+api.add_resource(GetCompany,"/company")
 
 
 if __name__ == "__main__":
