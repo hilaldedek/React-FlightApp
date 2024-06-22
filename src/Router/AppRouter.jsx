@@ -30,7 +30,7 @@ const AppRouter = () => {
             <Route  path="/profile" element={<Profile/>}/>
             <Route  path="/flights" element={<Flights/>}/>
         </Routes>
-        {/* <Footer/> */}
+        <Footer/>
     </BrowserRouter>
   )
 }

@@ -45,9 +45,9 @@ export default function Example() {
   const year=new Date().getFullYear();
 
   return (
-    <div className="bg-white">
-      <footer className="mx-auto flex max-w-7xl items-center justify-between p-6 lg:px-8" aria-label="Global">
-      <div className="">
+    <div className="bg-white flex justify-center">
+      <footer className="max-w-7xl mt-12 mb-6 lg:px-8 bottom-0" aria-label="Global">
+      <div >
           © {year} Copyright:
           <a className="text-whitehite" href="#"> Hilal Dedek</a>
         </div>
