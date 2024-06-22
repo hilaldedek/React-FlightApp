@@ -62,6 +62,73 @@ class FlightSearch(Resource):
         )
 
 
+class FilterFlightSearch(Resource):
+    def post(self):
+        data = request.get_json()
+        where = data.get("where")
+        to = data.get("to")
+        departure = data.get("departure")
+        regex_pattern = f"^{departure}"
+
+        filteredArray = data.get("filteredArray", [{}, {}, {}])
+        print("OLL ARTIKK: ", filteredArray[0].get("type"))
+        type_filter = filteredArray[0].get("type") if filteredArray[0].get("type") else None
+        price_filter = filteredArray[1].get("price") if filteredArray[1] else 20000
+        duration_filter = filteredArray[2].get("duration") if filteredArray[2] else 20
+
+        print(type_filter, price_filter, duration_filter)
+
+        if type_filter is None:
+            print("HELOOOOOO")
+            query = Flight.objects(
+                where=where,
+                to=to,
+                departure={"$regex": regex_pattern},
+                economicClassPrice__lte=price_filter,
+                duration__lte=duration_filter,
+            )
+        else:
+            print("HELÜÜÜÜÜÜ")
+            query = Flight.objects(
+                where=where,
+                to=to,
+                departure={"$regex": regex_pattern},
+                economicClassPrice__lte=price_filter,
+                type=type_filter,
+                duration__lte=duration_filter,
+            )
+
+        print("QUERRRYYY: ", query)
+
+        formatted_posts = [
+            {
+                "_id": str(flight.id),
+                "where": flight.where,
+                "to": flight.to,
+                "departure": flight.departure,
+                "company": flight.company,
+                "businessClassPrice": flight.businessClassPrice,
+                "economicClassPrice": flight.economicClassPrice,
+                "directPrice": flight.directPrice,
+                "type": flight.type,
+                "duration": flight.duration,
+                "empty": flight.empty,
+                "full": flight.full,
+            }
+            for flight in query
+        ]
+        print(formatted_posts)
+
+        if len(formatted_posts) > 0:
+            return make_response(
+                jsonify({"flights": formatted_posts, "status": "200"}), 200
+            )
+
+        return make_response(
+            jsonify({"message": "flights not found.", "status": "404"}), 404
+        )
+
+
 class AddFlight(Resource):
     @cross_origin()
     def post(self):

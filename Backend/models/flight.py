@@ -1,5 +1,6 @@
 from mongoengine import *
 
+
 class Flight(Document):
     _id = SequenceField(primary_key=True)
     where = StringField(required=True)
@@ -11,5 +12,7 @@ class Flight(Document):
     directPrice = IntField(required=False)
     type = StringField(required=True)
     duration = IntField(required=True)
-    empty = ListField(StringField(), default=lambda: [f"Seat {i}" for i in range(1, 11)])
+    empty = ListField(
+        StringField(), default=lambda: [f"Seat {i}" for i in range(1, 11)]
+    )
     full = ListField(StringField(), default=[])
