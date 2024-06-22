@@ -3,7 +3,7 @@ import { Card, Button, Empty, Spin, Dropdown, Menu, Slider, Radio, Form, Row, Co
 import { useLocation, useNavigate } from 'react-router-dom';
 import { toast } from 'react-toastify';
 import axios from 'axios';
-import { RiseOutlined } from '@ant-design/icons';
+import { RiseOutlined, FilterOutlined } from '@ant-design/icons';
 
 const Result = () => {
   const [responseLength, setResponseLength] = useState("");
@@ -13,24 +13,24 @@ const Result = () => {
   const [maxPrice, setMaxPrice] = useState(1000);
   const [maxDuration, setMaxDuration] = useState(10);
   const [flightType, setFlightType] = useState('all'); // 'all', 'direct', 'connecting'
+  const [tooltipVisible, setTooltipVisible] = useState(false);
   const navigate = useNavigate();
   const location = useLocation();
   const { from, to, departureDate, selectedCompanies } = location.state || {};
-  let filteredArray=[]
+  let filteredArray = [];
 
   const handleFlightSearch = async () => {
     try {
         const response = await axios.post('http://localhost:5000/flight-result', {
-                where: from,
-                to: to,
-                departure: departureDate,
-                company: selectedCompanies[0],
+            where: from,
+            to: to,
+            departure: departureDate,
+            company: selectedCompanies,
         });
         if (response.status === 200) {
             setResponseLength(response.data.flights.length);
             setResults(response.data.flights);
             setFilteredResults(response.data.flights);
-            console.log(response.data.flights);
         } else {
             toast.error('Flights not found.');
             setResults([]);
@@ -38,7 +38,6 @@ const Result = () => {
         }
     } catch (error) {
         toast.error('An error occurred while searching flights.');
-        console.error(error);
         setResults([]);
         setFilteredResults([]);
     } finally {
@@ -69,101 +68,105 @@ const Result = () => {
   };
 
   const handleFilter = async() => {
-    if (flightType!="all"){
-      flightType=="direct" ? filteredArray.push({"type":"Direct"}) : filteredArray.push({"type":"Connecting Flight"})
-      }
-    else{
-      filteredArray.push({})
+    if (flightType !== "all") {
+      flightType === "direct" ? filteredArray.push({ "type": "Direct" }) : filteredArray.push({ "type": "Connecting Flight" });
+    } else {
+      filteredArray.push({});
     }
-    maxPrice>0 ? filteredArray.push({"price":maxPrice}) : filteredArray.push({})
-    
-    maxDuration>0 ? filteredArray.push({"duration":maxDuration}) : filteredArray.push({})
-    console.log("Filtered array: ",filteredArray)
-    console.log(from,to,departureDate)
+    maxPrice > 0 ? filteredArray.push({ "price": maxPrice }) : filteredArray.push({});
+    maxDuration > 0 ? filteredArray.push({ "duration": maxDuration }) : filteredArray.push({});
+
     try {
-      const response = await axios.post('http://localhost:5000//filter-flight', {
-              where: from,
-              to: to,
-              departure: departureDate,
-              filteredArray:filteredArray
+      const response = await axios.post('http://localhost:5000/filter-flight', {
+        where: from,
+        to: to,
+        departure: departureDate,
+        filteredArray: filteredArray
       });
       if (response.status === 200) {
-          console.log("HELÜÜÜÜ",response.data);
-          filteredArray=[];
-
+        setFilteredResults(response.data.flights);
       } else {
-          toast.error('Flights not found.');
-          filteredArray=[];
+        toast.error('Flights not found.');
       }
-  } catch (error) {
+    } catch (error) {
       toast.error('An error occurred while searching flights.');
-      console.error(error);
-  } finally {
+    } finally {
       setLoading(false);
-  }
-  filteredArray=[];
+    }
+    filteredArray = [];
   };
 
-  const menu = (
+  const sortMenu = (
     <Menu onClick={handleMenuClick}>
       <Menu.Item key="direct">
-        Aktarmalı/Aktarmasız Uçuş
+      Connecting/Direct Flight
       </Menu.Item>
       <Menu.Item key="price">
-        Fiyat
+        Price
       </Menu.Item>
       <Menu.Item key="duration">
-        Uçuş Süresi
+        Duration
+      </Menu.Item>
+    </Menu>
+  );
+
+  const filterMenu = (
+    <Menu>
+      <Menu.Item key="priceFilter">
+        <Form.Item label="Max Price">
+          <Slider 
+            max={10000} 
+            onChange={value => setMaxPrice(value)} 
+            value={maxPrice} 
+            tooltipVisible={tooltipVisible} 
+            onAfterChange={() => setTooltipVisible(false)}
+            onBeforeChange={() => setTooltipVisible(true)} 
+          />
+        </Form.Item>
+      </Menu.Item>
+      <Menu.Item key="durationFilter">
+        <Form.Item label="Max Duration (hours)">
+          <Slider 
+            max={24} 
+            onChange={value => setMaxDuration(value)} 
+            value={maxDuration} 
+            tooltipVisible={tooltipVisible} 
+            onAfterChange={() => setTooltipVisible(false)}
+            onBeforeChange={() => setTooltipVisible(true)}
+          />
+        </Form.Item>
+      </Menu.Item>
+      <Menu.Item key="typeFilter">
+        <Form.Item label="Flight Type">
+          <Radio.Group 
+            onChange={e => setFlightType(e.target.value)} 
+            value={flightType}
+          >
+            <Radio value="all">All Flights</Radio>
+            <Radio value="direct">Direct Flight</Radio>
+            <Radio value="connecting">Connecting Flight</Radio>
+          </Radio.Group>
+        </Form.Item>
+      </Menu.Item>
+      <Menu.Item key="applyFilter">
+        <Button type="primary"  onClick={handleFilter}>
+          Filter
+        </Button>
       </Menu.Item>
     </Menu>
   );
 
   return (
     <div>
-      <Dropdown overlay={menu} placement="bottomLeft">
-        <Button><RiseOutlined />Sort By</Button>
-      </Dropdown>
-      
-      <Form layout="vertical" className='mt-4 mx-16'>
-        <Row gutter={16}>
-          <Col span={8}>
-            <Form.Item label="Max Price">
-              <Slider 
-                max={10000} 
-                onChange={value => setMaxPrice(value)} 
-                value={maxPrice} 
-                tooltipVisible 
-              />
-            </Form.Item>
-          </Col>
-          <Col span={8}>
-            <Form.Item label="Max Duration (hours)">
-              <Slider 
-                max={24} 
-                onChange={value => setMaxDuration(value)} 
-                value={maxDuration} 
-                tooltipVisible 
-              />
-            </Form.Item>
-          </Col>
-          <Col span={8}>
-            <Form.Item label="Flight Type">
-              <Radio.Group 
-                onChange={e => setFlightType(e.target.value)} 
-                value={flightType}
-              >
-                <Radio value="all">Tüm Uçuşlar</Radio>
-                <Radio value="direct">Aktarmasız Uçuş</Radio>
-                <Radio value="connecting">Aktarmalı Uçuş</Radio>
-              </Radio.Group>
-            </Form.Item>
-          </Col>
-        </Row>
-        <Button type="primary" htmlType="submit" onClick={handleFilter}>
-          Filter
-        </Button>
-      </Form>
-      
+      <div style={{ display: 'flex', justifyContent: 'center', margin:20 }}>
+        <Dropdown overlay={sortMenu} placement="bottom" className='m-6'>
+          <Button><RiseOutlined /> Sort</Button>
+        </Dropdown>
+        <Dropdown overlay={filterMenu} placement="bottom" className='m-6' onVisibleChange={visible => setTooltipVisible(visible)}>
+          <Button><FilterOutlined />Filter</Button>
+        </Dropdown>
+      </div>
+
       <div className='flex flex-wrap mt-16 gap-4 justify-center items-center'>
         {loading ? (
           <Spin size="large" />

@@ -98,7 +98,7 @@ export default function Example() {
           </a>
           {
             localStorage.getItem("token")&&localStorage.getItem("userStatus")==="Customer" ? (
-             <a href="#" className="text-sm font-semibold leading-6 text-gray-900">
+             <a href="/profile" className="text-sm font-semibold leading-6 text-gray-900">
             Profile
           </a> 
             ) : ""

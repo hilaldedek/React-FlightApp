@@ -4,8 +4,8 @@ import { useNavigate } from 'react-router';
 import { ArrowRightOutlined } from '@ant-design/icons';
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
-import companyData from './company.json';
 import sky from "../../assets/sky.jpg"
+import axios from 'axios';
 
 const Home = () => {
   const onChange = (date, dateString) => {
@@ -16,11 +16,29 @@ const Home = () => {
   const [from, setFrom] = useState('');
   const [to, setTo] = useState('');
   const [departureDate, setDepartureDate] = useState(null);
-  const [selectedCompanies, setSelectedCompanies] = useState([]);
+  const [selectedCompanies, setSelectedCompanies] = useState("");
+  const [companyArray,setCompanyArray]=useState([]);
+ 
   
 console.log("HELÜÜ: ",selectedCompanies,from,to,departureDate)
+
+const handleGetCompany = async () => {
+  try {
+      const response = await axios.get('http://localhost:5000/company');
+      console.log(response.data);
+      if (response.status === 200) {
+        setCompanyArray(response.data.company);
+      } else {
+          toast.error('Company is not found');
+      }
+  } catch (error) {
+      toast.error('An error occurred while fetching the company.');
+      console.error(error);
+  }
+};
+
   useEffect(() => {
-    setCompanies(companyData);
+    handleGetCompany();
   }, []);
   const steps = [
     {
@@ -58,13 +76,12 @@ console.log("HELÜÜ: ",selectedCompanies,from,to,departureDate)
       content: () => (
         <div className='m-14'>
           <Select
-            mode="multiple"
             allowClear
             className='w-72'
             placeholder="Please select"
             value={selectedCompanies}
             onChange={handleChange}
-            options={companies.map(company => ({ value: company.companyName, label: company.companyName }))}
+            options={companyArray.map(company => ({ value: company.companyName, label: company.companyName }))}
           />
         </div>
       ),

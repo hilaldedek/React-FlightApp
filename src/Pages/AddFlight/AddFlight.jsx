@@ -9,6 +9,7 @@ import {
 } from 'antd';
 import axios from 'axios';
 import moment from 'moment';
+import { useNavigate } from 'react-router';
 
 const AddFlight = () => {
     const [flightType, setFlightType] = useState("")
@@ -19,6 +20,7 @@ const AddFlight = () => {
     const [economicClassPrice, setEconomicClassPrice] = useState('');
     const [businessClassPrice, setBusinessClassPrice] = useState('');
     const [directPrice, setDirectPrice] = useState('');
+    const navigate=useNavigate();
     const company = localStorage.getItem("name");
 
     const handleAddFlight = async () => {
@@ -41,6 +43,7 @@ const AddFlight = () => {
         console.log(response.data)
         if (response.data.status === "201") {
           message.success('New Flight added successfully.');
+          navigate("/flights")
         } else {
           message.error(response.data.message);
         }
@@ -94,7 +97,7 @@ const AddFlight = () => {
               : ""
           }
           <Form.Item>
-            <Button onClick={handleAddFlight}>Add</Button>
+            <Button onClick={handleAddFlight} className='mt-4'>Add</Button>
           </Form.Item>
         </Form>
       </div>
