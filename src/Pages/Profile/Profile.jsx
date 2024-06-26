@@ -45,7 +45,6 @@ const Profile = () => {
                     Authorization: `Bearer ${token}`,
                 },
             });
-            console.log(response.data.tickets);
             if (response.status === 200) {
                 setTicketsArray(response.data.tickets);
             } else {
@@ -65,7 +64,7 @@ const Profile = () => {
         <div>
             <h1 className='mt-16 right-0 text-5xl font-sevillana'>Welcome {username}!</h1>
             <div>
-                <h1 className='m-24 text-3xl font-sevillana'>Your Tickets</h1>
+                <h1 className='m-24 text-3xl font-sevillana' style={{color:"#556d43"}}>Your Tickets</h1>
                 <div className='mt-16 mx-12'>
                     <Table
                         columns={columns}

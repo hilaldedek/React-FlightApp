@@ -1,42 +1,21 @@
-import { Fragment, useState } from 'react'
+import {useState } from 'react'
 import {
   Dialog,
   DialogPanel,
-  Disclosure,
-  DisclosureButton,
-  DisclosurePanel,
-  Popover,
-  PopoverButton,
   PopoverGroup,
-  PopoverPanel,
-  Transition,
 } from '@headlessui/react'
 import {
-  ArrowPathIcon,
   Bars3Icon,
-  ChartPieIcon,
-  CursorArrowRaysIcon,
-  FingerPrintIcon,
-  SquaresPlusIcon,
   XMarkIcon,
 } from '@heroicons/react/24/outline'
-import { ChevronDownIcon, PhoneIcon, PlayCircleIcon } from '@heroicons/react/20/solid'
 import PlaneIcon from '../../assets/paperPlane.png';
 import { Link, useNavigate } from 'react-router-dom';
 import { toast } from 'react-toastify';
 import axios from 'axios';
-
-const products = [
-  { name: 'Analytics', description: 'Get a better understanding of your traffic', href: '#', icon: ChartPieIcon },
-  { name: 'Engagement', description: 'Speak directly to your customers', href: '#', icon: CursorArrowRaysIcon },
-  { name: 'Security', description: 'Your customers’ data will be safe and secure', href: '#', icon: FingerPrintIcon },
-  { name: 'Integrations', description: 'Connect with third-party tools', href: '#', icon: SquaresPlusIcon },
-  { name: 'Automations', description: 'Build strategic funnels that will convert', href: '#', icon: ArrowPathIcon },
-]
-const callsToAction = [
-  { name: 'Watch demo', href: '#', icon: PlayCircleIcon },
-  { name: 'Contact sales', href: '#', icon: PhoneIcon },
-]
+import Plane from "../../assets/plane.png"
+import Person from "../../assets/person.png"
+import { Statistic } from 'antd';
+import CountUp from 'react-countup';
 
 function classNames(...classes) {
   return classes.filter(Boolean).join(' ')
@@ -45,7 +24,6 @@ function classNames(...classes) {
 export default function Example() {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false)
   const getToken = localStorage.getItem("token");
-  console.log(getToken);
   const navigate=useNavigate();
   const handleLogout = async () => {
     try {
@@ -55,9 +33,7 @@ export default function Example() {
           "Content-Type": "application/json",
         }
       });
-      console.log(response.data.status);
       if (response.data.status == 200) {
-        console.log("Logout successful");
         toast.success('Logout successfully.');
         localStorage.removeItem("token");
         localStorage.removeItem("name");
@@ -69,7 +45,7 @@ export default function Example() {
       toast.error('Logout failed.');
     }
   };
-
+  const formatter = (value) => <CountUp end={value} separator="," />;
   return (
     <header className="bg-white">
       <nav className="mx-auto flex max-w-7xl items-center justify-between p-6 lg:px-8" aria-label="Global">
@@ -117,9 +93,27 @@ export default function Example() {
           </a> 
             ) : ""
           }
-          
-          
         </PopoverGroup>
+        {
+          localStorage.getItem("token")&&localStorage.getItem("userStatus")=="Company" ? (
+            <div className="hidden lg:flex lg:flex-1 lg:justify-end">
+              <img src={Plane} className='w-7 mr-2'/>
+              <Link to="/flights" className="text-sm font-semibold leading-6 text-gray-900">
+                {localStorage.getItem("name")}
+              </Link>
+            </div>
+          ) : ""
+        }
+        {
+          localStorage.getItem("token")&&localStorage.getItem("userStatus")=="Customer" ? (
+            <div className="hidden lg:flex lg:flex-1 lg:justify-end">
+              <img src={Person} className='w-6 mr-2'/>
+              <Link to="/profile" className="text-sm font-semibold leading-6 text-gray-900">
+                {localStorage.getItem("name")}
+              </Link>
+            </div>
+          ) : ""
+        }
         {
           localStorage.getItem("token") ? (
             <div className="hidden lg:flex lg:flex-1 lg:justify-end">
@@ -216,6 +210,10 @@ export default function Example() {
                 }
               </div>
             </div>
+            <div className="mt-12">
+                  <Statistic value={1128936} formatter={formatter} className='text-center'/>
+                  <h3 className='font-sevillana text-3xl text-center'>users love Fairylines</h3>
+              </div>
           </div>
         </DialogPanel>
       </Dialog>

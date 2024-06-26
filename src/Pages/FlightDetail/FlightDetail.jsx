@@ -1,7 +1,6 @@
 import React, { useState } from 'react';
-import { Radio, Button, List, Transfer, Alert } from 'antd';
+import { Button, List, Transfer, Alert, ConfigProvider } from 'antd';
 import { useLocation, useNavigate } from 'react-router-dom';
-import { CalendarOutlined } from '@ant-design/icons';
 import fromToImg from "../../assets/destination.png";
 import durationImg from "../../assets/clock.png";
 import departureImg from "../../assets/calendar.png";
@@ -9,7 +8,6 @@ import companyImg from "../../assets/airport.png";
 import moneyImg from "../../assets/wallet.png";
 import { ToastContainer, toast } from 'react-toastify';
 import Marquee from 'react-fast-marquee';
-import axios from 'axios';
 
 const FlightDetail = () => {
   const location = useLocation();
@@ -18,14 +16,11 @@ const FlightDetail = () => {
   const [targetKeys, setTargetKeys] = useState([]);
   const [selectedKeys, setSelectedKeys] = useState([]);
   const [disabled, setDisabled] = useState(false);
-
   let totalPrice = 0;
   const emptySeat = flightDetails.empty;
-  console.log("FLIGHT DETAIL: ", flightDetails);
-console.log(targetKeys)
   const handlePayButtonClick = () => {
     
-    if (targetKeys.length==0) {
+    if (targetKeys.length === 0) {
       toast.warn('Please select seat.');
     } else {
       handleSelect();
@@ -53,12 +48,9 @@ console.log(targetKeys)
       icon: moneyImg,
       title: (
         <div>
-          {
-            flightDetails.directPrice>0 ? (
-              <div>Direct: {flightDetails.directPrice}$</div>
-            ) : ""
-          }
-          
+          {flightDetails.directPrice > 0 ? (
+            <div>Direct: {flightDetails.directPrice}$</div>
+          ) : ""}
           <div>Business Class: {flightDetails.businessClassPrice}$</div>
           <div>Economic Class: {flightDetails.economicClassPrice}$</div>
         </div>
@@ -89,56 +81,75 @@ console.log(targetKeys)
   };
 
   const handleSelect = async () => {
-    const payData=[targetKeys,flightDetails]
-    console.log(payData)
+    const payData = [targetKeys, flightDetails];
     navigate("/payment", { state: payData });
   };
 
   return (
-    <div className='mt-12 flex flex-wrap justify-center '>
-      <div className='mx-auto'>
-        <List className='w-72 mx-auto mt-12'
-          itemLayout="horizontal"
-          dataSource={data}
-          renderItem={(item, index) => (
-            <List.Item>
-              <img src={item.icon} alt="" className='w-12' />
-              <List.Item.Meta
-                title={item.title}
-              />
-            </List.Item>
-          )}
-        />
-      <ToastContainer />
+    <ConfigProvider
+      theme={{
+        token: {
+          colorPrimary: '#A8CD9F',
+          borderRadius: 8,
+        },
+        components: {
+          Button: {
+            colorPrimary: '#A8CD9F',
+            colorPrimaryHover: '#85b382',
+            colorPrimaryActive: '#6a966a',
+          },
+          Transfer: {
+            colorPrimary: '#A8CD9F',
+          },
+        },
+      }}
+    >
+      <div className='mt-12 flex flex-wrap justify-center '>
+        <div className='mx-auto'>
+          <List className='w-72 mx-auto mt-12'
+            itemLayout="horizontal"
+            dataSource={data}
+            renderItem={(item, index) => (
+              <List.Item>
+                <img src={item.icon} alt="" className='w-12' />
+                <List.Item.Meta
+                  title={item.title}
+                />
+              </List.Item>
+            )}
+          />
+        <ToastContainer />
+        </div>
+        {localStorage.getItem("token") && localStorage.getItem("userStatus") === "Customer" ? (
+          <div>
+            <Alert className='w-2/5 mt-12 mx-auto'
+              banner
+              message={
+                <Marquee pauseOnHover gradient={false}>
+                  The first 3 seats are reserved for Business Class. (Seat1, Seat2, Seat3)
+                </Marquee>
+              }
+            />
+            <Transfer
+              dataSource={mockData}
+              titles={['Empty Seats', 'Selected Seats']}
+              targetKeys={targetKeys}
+              selectedKeys={selectedKeys}
+              onChange={handleChange}
+              onSelectChange={handleSelectChange}
+              onScroll={handleScroll}
+              render={(item) => item.title}
+              disabled={disabled}
+              oneWay
+              className='mt-16 flex justify-center'
+            />
+            <Button type="primary" className='w-32 m-auto my-12' onClick={handlePayButtonClick}>
+              Pay
+            </Button>
+          </div>
+        ) : ""}
       </div>
-      <div>
-        <Alert className='w-2/5 mt-12 mx-auto'
-    banner
-    message={
-      <Marquee pauseOnHover gradient={false}>
-        The first 3 seats are reserved for Business Class. (Seat1, Seat2 ,Seat3)
-      </Marquee>
-    }
-  />
-      <Transfer
-        dataSource={mockData}
-        titles={['Empty Seats', 'Selected Seats']}
-        targetKeys={targetKeys}
-        selectedKeys={selectedKeys}
-        onChange={handleChange}
-        onSelectChange={handleSelectChange}
-        onScroll={handleScroll}
-        render={(item) => item.title}
-        disabled={disabled}
-        oneWay
-        className='mt-16  flex justify-center'
-      />
-      <Button type="primary" className='w-32 m-auto my-12' onClick={handlePayButtonClick}>
-        Pay
-      </Button>
-      </div>
-      
-    </div>
+    </ConfigProvider>
   );
 }
 

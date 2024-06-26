@@ -52,7 +52,6 @@ const Flights = () => {
                     Authorization: `Bearer ${token}`,
                 },
             });
-            console.log(response.data.flights);
             if (response.status === 200) {
                 setFlightsArray(response.data.flights);
             } else {
@@ -75,7 +74,6 @@ const Flights = () => {
                     _id: flightId,
                 },
             });
-            console.log(response.data);
             if (response.status === 200) {
                 toast.success('Flight deleted successfully.');
                 handleFlights();

@@ -1,7 +1,7 @@
 import React, { useState } from 'react'
 import { UserOutlined } from '@ant-design/icons';
 import { EyeInvisibleOutlined, EyeTwoTone } from '@ant-design/icons';
-import { Button, Input, Segmented, message } from 'antd';
+import { Button, ConfigProvider, Input, Segmented, message } from 'antd';
 import axios from 'axios';
 import { useNavigate } from 'react-router';
 
@@ -14,7 +14,6 @@ const Register = () => {
 
   const handleRegister = async () => {
     try {
-      console.log("STATUS: ",status)
       const response = await axios.post('http://localhost:5000/user/auth/register', {
         username,
         email,
@@ -34,6 +33,24 @@ const Register = () => {
   };
 
   return (
+    <ConfigProvider
+      theme={{
+        token: {
+          colorPrimary: '#A8CD9F',
+          borderRadius: 8,
+        },
+        components: {
+          Button: {
+            colorPrimary: '#A8CD9F',
+            colorPrimaryHover: '#85b382',
+            colorPrimaryActive: '#6a966a',
+          },
+          Segmented: {
+            colorPrimary: '#A8CD9F',
+          },
+        },
+      }}
+    >
     <div className='flex flex-col justify-center items-center gap-4 m-16'>
       <h1 className='text-4xl m-4 font-sevillana text-3xl'>Register</h1>
       <Segmented options={["Customer", "Company"]} block value={status} onChange={(value) => setStatus(value)} className="mb-8 w-96 m-auto"/>
@@ -62,6 +79,7 @@ const Register = () => {
       />
       <Button className='w-32' onClick={handleRegister}>Register</Button>
     </div>
+    </ConfigProvider>
   )
 }
 

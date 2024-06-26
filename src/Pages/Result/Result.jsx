@@ -1,9 +1,10 @@
 import React, { useEffect, useState } from 'react';
-import { Card, Button, Empty, Spin, Dropdown, Menu, Slider, Radio, Form, Row, Col } from "antd";
+import { Card, Button, Empty, Spin, Dropdown, Menu, Slider, Radio, Form } from "antd";
 import { useLocation, useNavigate } from 'react-router-dom';
 import { toast } from 'react-toastify';
 import axios from 'axios';
 import { RiseOutlined, FilterOutlined } from '@ant-design/icons';
+import { ConfigProvider } from 'antd';
 
 const Result = () => {
   const [responseLength, setResponseLength] = useState("");
@@ -157,37 +158,56 @@ const Result = () => {
   );
 
   return (
-    <div>
-      <div style={{ display: 'flex', justifyContent: 'center', margin:20 }}>
-        <Dropdown overlay={sortMenu} placement="bottom" className='m-6'>
-          <Button><RiseOutlined /> Sort</Button>
-        </Dropdown>
-        <Dropdown overlay={filterMenu} placement="bottom" className='m-6' onVisibleChange={visible => setTooltipVisible(visible)}>
-          <Button><FilterOutlined />Filter</Button>
-        </Dropdown>
-      </div>
+    <ConfigProvider
+      theme={{
+        token: {
+          colorPrimary: '#A8CD9F',
+          borderRadius: 8,
+        },
+        components: {
+          Button: {
+            colorPrimary: '#a8cd9fb4',
+            colorPrimaryHover: '#85b382',
+            colorPrimaryActive: '#6a966a',
+          },
+          Spin: {
+            colorPrimary: '#A8CD9F',
+          },
+        },
+      }}
+    >
+      <div>
+        <div style={{ display: 'flex', justifyContent: 'center', margin: 20 }}>
+          <Dropdown overlay={sortMenu} placement="bottom" className='m-6'>
+            <Button><RiseOutlined /> Sort</Button>
+          </Dropdown>
+          <Dropdown overlay={filterMenu} placement="bottom" className='m-6' onVisibleChange={visible => setTooltipVisible(visible)}>
+            <Button><FilterOutlined />Filter</Button>
+          </Dropdown>
+        </div>
 
-      <div className='flex flex-wrap mt-16 gap-4 justify-center items-center'>
-        {loading ? (
-          <Spin size="large" />
-        ) : (
-          responseLength > 0 ? (
-            filteredResults.map(result => (
-              <Card key={result._id} title={`${result.where} > ${result.to}`} style={{ width: 300, marginBottom: 20 }}>
-                <p>Departure: {result.departure}</p>
-                <p>Company: {result.company}</p>
-                <p>{result.type}</p>
-                <Button type="primary" className='mt-4' onClick={() => navigate(`/flight-detail/${result.where}/${result.to}/${result.company}`, { state: result })}>
-                  Detail
-                </Button>
-              </Card>
-            ))
+        <div className='flex flex-wrap mt-16 gap-4 justify-center items-center'>
+          {loading ? (
+            <Spin size="large" />
           ) : (
-            <Empty description="No Data Found" />
-          )
-        )}
+            responseLength > 0 ? (
+              filteredResults.map(result => (
+                <Card key={result._id} title={`${result.where} > ${result.to}`} style={{ width: 300, marginBottom: 20 }}>
+                  <p>Departure: {result.departure}</p>
+                  <p>Company: {result.company}</p>
+                  <p>{result.type}</p>
+                  <Button type="primary" className='mt-4' onClick={() => navigate(`/flight-detail/${result.where}/${result.to}/${result.company}`, { state: result })}>
+                    Detail
+                  </Button>
+                </Card>
+              ))
+            ) : (
+              <Empty description="No Data Found" />
+            )
+          )}
+        </div>
       </div>
-    </div>
+    </ConfigProvider>
   );
 };
 

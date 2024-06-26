@@ -18,9 +18,7 @@ const Payment = () => {
   const departure = priceDetails[1].departure;
   const company = priceDetails[1].company;
 
-  console.log("PAYMENT DATA: ", priceDetails);
   const [modal, contextHolder] = Modal.useModal();
-  console.log("SEAT: ", seat);
 
   const calculateTotalPrice = (seats, businessPrice, economicPrice, directPrice) => {
     let totalPrice = 0;
@@ -36,6 +34,7 @@ const Payment = () => {
   };
 
   const totalPrice = calculateTotalPrice(seat, businessPrice, economicPrice, directPrice);
+
   const handlePay = async () => {
     try {
       const token = localStorage.getItem("token");
@@ -64,7 +63,7 @@ const Payment = () => {
   };
 
   const confirmPayment = () => {
-    modal.confirm({
+    Modal.confirm({
       title: 'Confirm',
       icon: <ExclamationCircleOutlined />,
       content: `Do you confirm the ${totalPrice}$ payment?`,
@@ -73,6 +72,8 @@ const Payment = () => {
       onOk: () => {
         handlePay();
       },
+      cancelButtonProps: { style: { backgroundColor: "#ff696962", borderColor: "#ff69695c", color: "#FF6969" } },
+      okButtonProps: { style: { backgroundColor: "#a8cd9f46", borderColor: "#a8cd9f46", color: "#7F9F80" } },
     });
   };
 
@@ -100,7 +101,7 @@ const Payment = () => {
       <div className='mt-12 text-2xl'>{totalPrice}$</div>
       <div>
         <Space>
-          <Button className='mt-8' onClick={confirmPayment}>Pay</Button>
+          <Button className='mt-8' style={{ backgroundColor: "#a8cd9f46", borderColor: "#a8cd9f46", color: "#7F9F80" }} onClick={confirmPayment}>Pay</Button>
         </Space>
       </div>
       {contextHolder}

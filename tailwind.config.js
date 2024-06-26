@@ -4,7 +4,7 @@ module.exports = {
   theme: {
     fontFamily: {
       sevillana: ["Sevillana", "cursive-serif"],
-      // Diğer fontlar buraya eklenebilir
+'playwrite-mexico': ['Playwrite Mexico', 'sans-serif'],
     },
     extend: {},
   },
